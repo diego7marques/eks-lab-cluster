@@ -42,3 +42,9 @@ module "eks" {
     }
   }
 }
+
+resource "aws_iam_role_policy_attachment" "attach" {
+  role       = module.eks.cluster_iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy" ## https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html
+}
+
