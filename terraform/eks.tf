@@ -1,11 +1,10 @@
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  version         = "20.8.3"
-  cluster_name    = "eks-lab-cluster"
-  cluster_version = "1.29"
-
-  subnet_ids      = module.vpc.public_subnets
-  vpc_id          = module.vpc.vpc_id
+  version         = "20.24.3"
+  cluster_name    = "${var.prefix_name}-eks"
+  cluster_version = "1.31"
+  subnet_ids      = var.create_vpc ? module.vpc.public_subnets : var.subnets
+  vpc_id          = var.create_vpc ? module.vpc.vpc_id : var.vpc_id 
 
   authentication_mode = "API_AND_CONFIG_MAP"
 
@@ -18,8 +17,8 @@ module "eks" {
       disk_size        = 20
 
       additional_tags = {
-        Environment = "test"
-        Name        = "eks-worker-node"
+        Environment = var.env
+        Name        = "${var.prefix_name}-worker-node"
       }
     }
   }
@@ -47,4 +46,3 @@ resource "aws_iam_role_policy_attachment" "attach" {
   role       = module.eks.cluster_iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy" ## https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html
 }
-
