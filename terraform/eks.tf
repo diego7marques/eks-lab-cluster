@@ -3,8 +3,8 @@ module "eks" {
   version         = "20.24.3"
   cluster_name    = "${var.prefix_name}-eks"
   cluster_version = "1.31"
-  subnet_ids      = var.create_vpc ? module.vpc.public_subnets : var.subnets
-  vpc_id          = var.create_vpc ? module.vpc.vpc_id : var.vpc_id 
+  subnet_ids      = var.create_vpc ? module.vpc[0].public_subnets : var.subnets
+  vpc_id          = var.create_vpc ? module.vpc[0].vpc_id : var.vpc_id 
 
   authentication_mode = "API_AND_CONFIG_MAP"
 

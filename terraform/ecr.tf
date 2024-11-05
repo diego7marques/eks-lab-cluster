@@ -1,5 +1,5 @@
 module "ecr" {
-  for_each = var.create_ecr ? [1] : []
+  count = var.create_ecr ? 1 : 0
   source = "terraform-aws-modules/ecr/aws"
 
   repository_name = "${var.prefix_name}-ecr"
